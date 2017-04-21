@@ -30,25 +30,34 @@ public class RestClient implements IRestClient {
     }
     private RestClient() {}
 
-    private static final String BASE_URL = "http://api.themoviedb.org/3/";
+    public static final String IMG_BASE_URL = "http://image.tmdb.org/t/p/w185";
+    public static final String IMG_ORIGIN_URL = "http://image.tmdb.org/t/p/w500";
+
+    private static final String BASE_URL = "http://api.themoviedb.org/3";
     private static final String API_KEY = BuildConfig.API_KEY;
 
     static {
         assert API_KEY != "";
     }
 
-    private NetRequest request = new NetRequest();
 
     @Override
-    public void loadPopular() {
+    public void loadPopular(Callback callback) {
+        new NetRequest(callback).execute("/movie/popular");
     }
 
     @Override
-    public void loadRecent() {
-
+    public void loadTopRated(Callback callback) {
+        new NetRequest(callback).execute("/movie/top_rated");
     }
 
     private class NetRequest extends AsyncTask<String, Integer, Object> {
+
+        private Callback callback;
+
+        public NetRequest(Callback callback) {
+            this.callback = callback;
+        }
 
         private final int READ_TIMEOUT = 30 * 1000; // 30 seconds
 
@@ -77,20 +86,27 @@ public class RestClient implements IRestClient {
                 return gson.fromJson(buffer.toString(), MovieResponse.class);
 
             } catch (MalformedURLException me) {
-                me.printStackTrace();
-                return null;
+                return me;
             } catch (IOException ie) {
-                ie.printStackTrace();
-                return null;
+                return ie;
             } catch (JsonSyntaxException je) {
-                je.printStackTrace();
-                return null;
+                return je;
             }
         }
 
         @Override
         protected void onPostExecute(Object response) {
             super.onPostExecute(response);
+            if (callback == null) return;
+
+            if (response == null)
+                response = new NullPointerException("Server response is null");
+
+            if (response instanceof Exception) {
+                callback.onError((Exception) response);
+            } else {
+                callback.onSuccess(response);
+            }
         }
     }
 }

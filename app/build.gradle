@@ -14,7 +14,7 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
-            buildConfigField "String", "API_KEY", "9be21e0bd7096f5c742ce5d909f3e245" //TODO: insert your api key for moviedb here
+            buildConfigField "String", "API_KEY", "\"9be21e0bd7096f5c742ce5d909f3e245\"" //TODO: insert your api key for moviedb here
         }
         release {
             minifyEnabled false
@@ -40,10 +40,11 @@ dependencies {
     compile "com.android.support:design:$supportVer"
 
     //Image loading
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
     testCompile 'junit:junit:4.12'
 
     //Json parser
     compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }

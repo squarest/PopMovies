@@ -5,6 +5,6 @@ package com.udacity.timpl.popmovies.network;
  */
 
 public interface IRestClient {
-    void loadPopular();
-    void loadRecent();
+    void loadPopular(Callback callback);
+    void loadTopRated(Callback callback);
 }
