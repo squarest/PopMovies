@@ -36,10 +36,6 @@ public class RestClient implements IRestClient {
     private static final String BASE_URL = "http://api.themoviedb.org/3";
     private static final String API_KEY = BuildConfig.API_KEY;
 
-    static {
-        assert API_KEY != "";
-    }
-
 
     @Override
     public void loadPopular(Callback callback) {
