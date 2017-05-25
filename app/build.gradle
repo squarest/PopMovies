@@ -21,10 +21,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 ext {
-    supportVer = '25.2.0'
+    supportVer = '25.3.1'
+    roomVer = '1.0.0-alpha1'
 }
 
 dependencies {
@@ -41,6 +47,18 @@ dependencies {
 
     //Image loading
     compile 'com.squareup.picasso:picasso:2.5.2'
+
+    //Network
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+
+    //RxJava
+    compile "io.reactivex.rxjava2:rxjava:2.1.0"
+
+    //Room
+    compile "android.arch.persistence.room:runtime:$roomVer"
+    annotationProcessor "android.arch.persistence.room:compiler:$roomVer"
+    compile "android.arch.persistence.room:rxjava2:$roomVer"
 
     testCompile 'junit:junit:4.12'
 
