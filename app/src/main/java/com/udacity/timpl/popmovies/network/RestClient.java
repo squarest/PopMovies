@@ -15,6 +15,17 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 /**
  * Created by tplotnikov on 10.04.17.
  */
@@ -23,86 +34,59 @@ public class RestClient implements IRestClient {
 
     /* Singleton init */
     private static RestClient instance;
+
     public static RestClient getInstance() {
         if (instance == null)
             instance = new RestClient();
         return instance;
     }
-    private RestClient() {}
 
     public static final String IMG_BASE_URL = "http://image.tmdb.org/t/p/w185";
+
     public static final String IMG_ORIGIN_URL = "http://image.tmdb.org/t/p/w500";
+    private static final String BASE_URL = "http://api.themoviedb.org/3/";
 
-    private static final String BASE_URL = "http://api.themoviedb.org/3";
     private static final String API_KEY = BuildConfig.API_KEY;
+    private API api;
 
+    private RestClient() {
+        api = create();
+    }
+
+
+    private API create() {
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(chain -> {
+                    HttpUrl url = chain.request().url().newBuilder()
+                            .addQueryParameter("api_key", API_KEY)
+                            .build();
+                    Request req = chain.request().newBuilder()
+                            .url(url)
+                            .build();
+                    return chain.proceed(req);
+                }).build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(client)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        return retrofit.create(API.class);
+    }
 
     @Override
     public void loadPopular(Callback callback) {
-        new NetRequest(callback).execute("/movie/popular");
+        api.getPopularMovies()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(callback::onSuccess, callback::onError);
     }
 
     @Override
     public void loadTopRated(Callback callback) {
-        new NetRequest(callback).execute("/movie/top_rated");
-    }
-
-    private class NetRequest extends AsyncTask<String, Integer, Object> {
-
-        private Callback callback;
-
-        public NetRequest(Callback callback) {
-            this.callback = callback;
-        }
-
-        private final int READ_TIMEOUT = 30 * 1000; // 30 seconds
-
-        private BufferedReader reader;
-        private Gson gson = new GsonBuilder().create();
-        @Override
-        protected Object doInBackground(String... params) {
-            if (params.length < 1)
-                return null;
-            URL url;
-            try {
-                url = new URL(String.format("%s%s?api_key=%s", BASE_URL, params[0], API_KEY));
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-                connection.setRequestMethod("GET");
-                connection.setReadTimeout(READ_TIMEOUT);
-                connection.connect();
-
-                reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                StringBuilder buffer = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    buffer.append(line);
-                }
-
-                return gson.fromJson(buffer.toString(), MovieResponse.class);
-
-            } catch (MalformedURLException me) {
-                return me;
-            } catch (IOException ie) {
-                return ie;
-            } catch (JsonSyntaxException je) {
-                return je;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Object response) {
-            super.onPostExecute(response);
-            if (callback == null) return;
-
-            if (response == null)
-                response = new NullPointerException("Server response is null");
-
-            if (response instanceof Exception) {
-                callback.onError((Exception) response);
-            } else {
-                callback.onSuccess(response);
-            }
-        }
+        api.getTopRatedMovies()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(callback::onSuccess, callback::onError);
     }
 }

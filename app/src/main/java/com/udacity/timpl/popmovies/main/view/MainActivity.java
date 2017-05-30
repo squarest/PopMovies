@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onError(Exception e) {
+        public void onError(Throwable e) {
             showError(e);
         }
     };
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showError(Exception e) {
+    private void showError(Throwable e) {
         e.printStackTrace();
         Toast.makeText(this, R.string.dump_error_message, Toast.LENGTH_LONG).show();
     }

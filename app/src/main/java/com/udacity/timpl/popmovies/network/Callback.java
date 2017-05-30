@@ -6,5 +6,5 @@ package com.udacity.timpl.popmovies.network;
 
 public interface Callback<T> {
     void onSuccess(T result);
-    void onError(Exception e);
+    void onError(Throwable e);
 }
