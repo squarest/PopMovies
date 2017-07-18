@@ -25,15 +25,12 @@ public class FilmViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         poster = (ImageView) itemView.findViewById(R.id.poster);
 
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (film == null) return;
+        itemView.setOnClickListener(v -> {
+            if (film == null) return;
 
-                Intent intent = new Intent(itemView.getContext(), DetailedActivity.class);
-                intent.putExtra(DetailedActivity.FILM_KEY, film);
-                itemView.getContext().startActivity(intent);
-            }
+            Intent intent = new Intent(itemView.getContext(), DetailedActivity.class);
+            intent.putExtra(DetailedActivity.FILM_KEY, film);
+            itemView.getContext().startActivity(intent);
         });
     }
 

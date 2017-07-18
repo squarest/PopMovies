@@ -33,11 +33,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RestClient implements IRestClient {
 
     /* Singleton init */
-    private static RestClient instance;
+    private static RestClient instance = new RestClient();
 
     public static RestClient getInstance() {
-        if (instance == null)
-            instance = new RestClient();
         return instance;
     }
 

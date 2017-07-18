@@ -13,6 +13,8 @@ import android.widget.Toast;
 import com.udacity.timpl.popmovies.R;
 import com.udacity.timpl.popmovies.main.adapters.FilmAdapter;
 import com.udacity.timpl.popmovies.main.model.entities.Film;
+import com.udacity.timpl.popmovies.main.model.services.IMovieListService;
+import com.udacity.timpl.popmovies.main.model.services.MovieListService;
 import com.udacity.timpl.popmovies.network.Callback;
 import com.udacity.timpl.popmovies.network.MovieResponse;
 import com.udacity.timpl.popmovies.network.RestClient;
@@ -25,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView filmList;
+
+    private IMovieListService movieListService = MovieListService.instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_top_rated:
                 loadTopRated();
                 break;
+            case R.id.menu_favorite:
+                loadFavorite();
+                break;
             default:
                 break;
         }
@@ -67,11 +74,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadPopular() {
-        RestClient.getInstance().loadPopular(callback);
+        movieListService.loadPopular(callback);
     }
 
     private void loadTopRated() {
-        RestClient.getInstance().loadTopRated(callback);
+        movieListService.loadTopRated(callback);
+    }
+
+    private void loadFavorite() {
+        movieListService.loadFavorite(callback);
     }
 
     private Callback<MovieResponse> callback = new Callback<MovieResponse>() {

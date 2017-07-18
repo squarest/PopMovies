@@ -1,5 +1,6 @@
 package com.udacity.timpl.popmovies.main.model.entities;
 
+import android.arch.persistence.room.Entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -9,6 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by timpl on 09.04.2017.
  */
 
+@Entity(tableName = "films")
 public class Film implements Parcelable {
 
     @SerializedName("poster_path")
