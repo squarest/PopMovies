@@ -1,6 +1,7 @@
 package com.udacity.timpl.popmovies.main.model.entities;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -12,6 +13,9 @@ import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "films")
 public class Film implements Parcelable {
+    @PrimaryKey
+    @SerializedName("id")
+    public int id;
 
     @SerializedName("poster_path")
     public String posterPath;
@@ -28,9 +32,11 @@ public class Film implements Parcelable {
     @SerializedName("vote_count")
     public int voteCount;
 
-    public Film() {}
+    public Film() {
+    }
 
     private Film(Parcel source) {
+        this.id = source.readInt();
         this.posterPath = source.readString();
         this.releaseDate = source.readString();
         this.originalTitle = source.readString();
@@ -45,6 +51,7 @@ public class Film implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(posterPath);
         dest.writeString(releaseDate);
         dest.writeString(originalTitle);

@@ -1,9 +1,8 @@
 package com.udacity.timpl.popmovies.main.view;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,9 +16,9 @@ import com.udacity.timpl.popmovies.main.model.services.IMovieListService;
 import com.udacity.timpl.popmovies.main.model.services.MovieListService;
 import com.udacity.timpl.popmovies.network.Callback;
 import com.udacity.timpl.popmovies.network.MovieResponse;
-import com.udacity.timpl.popmovies.network.RestClient;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView filmList;
+    private ArrayList<Film> films;
 
     private IMovieListService movieListService = MovieListService.instance;
 
@@ -74,21 +74,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadPopular() {
-        movieListService.loadPopular(callback);
+        movieListService.loadPopular(networkCallback);
     }
 
     private void loadTopRated() {
-        movieListService.loadTopRated(callback);
+        movieListService.loadTopRated(networkCallback);
     }
 
     private void loadFavorite() {
-        movieListService.loadFavorite(callback);
+        movieListService.loadFavorite(dbCallback);
     }
 
-    private Callback<MovieResponse> callback = new Callback<MovieResponse>() {
+    private Callback<MovieResponse> networkCallback = new Callback<MovieResponse>() {
         @Override
         public void onSuccess(MovieResponse result) {
             showSuccess(result.results);
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            showError(e);
+        }
+    };
+    private Callback<List<Film>> dbCallback = new Callback<List<Film>>() {
+        @Override
+        public void onSuccess(List<Film> films) {
+            showSuccess((ArrayList<Film>) films);
         }
 
         @Override
@@ -101,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         if (filmList.getAdapter() == null) {
             filmList.setAdapter(new FilmAdapter(films));
         } else {
-            ((FilmAdapter)filmList.getAdapter()).setItems(films);
+            ((FilmAdapter) filmList.getAdapter()).setItems(films);
         }
     }
 
