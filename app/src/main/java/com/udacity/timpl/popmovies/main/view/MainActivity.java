@@ -1,5 +1,6 @@
 package com.udacity.timpl.popmovies.main.view;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -22,11 +23,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int SPAN_SIZE = 2;
+    private static int SPAN_SIZE = 2;
 
     private Toolbar toolbar;
     private RecyclerView filmList;
-    private ArrayList<Film> films;
 
     private IMovieListService movieListService = MovieListService.instance;
 
@@ -37,6 +37,21 @@ public class MainActivity extends AppCompatActivity {
         initUi();
 
         loadPopular();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        switch (getResources().getConfiguration().orientation) {
+            case Configuration.ORIENTATION_LANDSCAPE:
+                SPAN_SIZE = 3;
+                break;
+            case Configuration.ORIENTATION_PORTRAIT:
+                SPAN_SIZE = 2;
+                break;
+
+        }
+        filmList.setLayoutManager(new GridLayoutManager(this, SPAN_SIZE));
     }
 
     @Override
