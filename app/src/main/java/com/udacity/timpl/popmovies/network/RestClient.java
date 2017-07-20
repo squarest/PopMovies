@@ -1,27 +1,10 @@
 package com.udacity.timpl.popmovies.network;
 
-import android.os.AsyncTask;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
 import com.udacity.timpl.popmovies.BuildConfig;
-import com.udacity.timpl.popmovies.main.model.entities.Film;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.HttpUrl;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -30,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by tplotnikov on 10.04.17.
  */
 
-public class RestClient implements IRestClient {
+public class RestClient {
 
     /* Singleton init */
     private static RestClient instance = new RestClient();
@@ -51,6 +34,9 @@ public class RestClient implements IRestClient {
         api = create();
     }
 
+    public API getApi() {
+        return api;
+    }
 
     private API create() {
         OkHttpClient client = new OkHttpClient.Builder()
@@ -72,19 +58,12 @@ public class RestClient implements IRestClient {
         return retrofit.create(API.class);
     }
 
-    @Override
-    public void loadPopular(Callback callback) {
-        api.getPopularMovies()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(callback::onSuccess, callback::onError);
+
     }
 
-    @Override
-    public void loadTopRated(Callback callback) {
-        api.getTopRatedMovies()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(callback::onSuccess, callback::onError);
-    }
-}
+//    @Override
+//    public void loadTrailers(int id, Callback callback) {
+//        api.getMovieTrailers(String.valueOf(id))
+//                .subscribeOn(Schedulers.io());
+//    }
+

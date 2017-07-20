@@ -1,6 +1,7 @@
-package com.udacity.timpl.popmovies.network;
+package com.udacity.timpl.popmovies.network.responses;
 
-import com.udacity.timpl.popmovies.main.model.entities.Film;
+
+import com.udacity.timpl.popmovies.entities.Film;
 
 import java.util.ArrayList;
 

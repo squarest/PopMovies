@@ -2,18 +2,16 @@ package com.udacity.timpl.popmovies.main.adapters;
 
 
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.udacity.timpl.popmovies.R;
-import com.udacity.timpl.popmovies.main.model.entities.Film;
-import com.udacity.timpl.popmovies.main.view.FilmViewHolder;
+import com.udacity.timpl.popmovies.entities.Film;
+import com.udacity.timpl.popmovies.main.presentation.FilmViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by timpl on 09.04.2017.

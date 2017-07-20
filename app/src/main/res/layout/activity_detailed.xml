@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.udacity.timpl.popmovies.detailed.DetailedActivity">
+    tools:context="com.udacity.timpl.popmovies.detailed.presentation.DetailedActivity">
 
     <include
         android:id="@+id/toolbar_layout"
@@ -41,13 +41,19 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp" />
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/trailer_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never" />
+
             <LinearLayout
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp">
 
                 <TextView
                     android:id="@+id/votes"

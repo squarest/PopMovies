@@ -1,5 +1,8 @@
 package com.udacity.timpl.popmovies.network;
 
+import com.udacity.timpl.popmovies.network.responses.MovieResponse;
+import com.udacity.timpl.popmovies.network.responses.TrailerResponse;
+
 import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -17,7 +20,7 @@ public interface API {
     Single<MovieResponse> getTopRatedMovies();
 
     @GET("movie/{id}/videos")
-    Single<Object> getMovieTrailers(@Path("id") String movieId);
+    Single<TrailerResponse> getMovieTrailers(@Path("id") String movieId);
 
     @GET("movie/{id}/reviews")
     Single<Object> getMovieReviews(@Path("id") String movieId);

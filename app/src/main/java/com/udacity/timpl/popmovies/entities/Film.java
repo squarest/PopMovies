@@ -1,4 +1,4 @@
-package com.udacity.timpl.popmovies.main.model.entities;
+package com.udacity.timpl.popmovies.entities;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
@@ -59,7 +59,7 @@ public class Film implements Parcelable {
         dest.writeInt(voteCount);
     }
 
-    public static final Parcelable.Creator<Film> CREATOR = new Parcelable.Creator<Film>() {
+    public static final Creator<Film> CREATOR = new Creator<Film>() {
         @Override
         public Film createFromParcel(Parcel source) {
             return new Film(source);
