@@ -1,10 +1,10 @@
 package com.udacity.timpl.popmovies.main.domain;
 
-import com.udacity.timpl.popmovies.App;
+import com.udacity.timpl.popmovies.data.FilmRepository;
 import com.udacity.timpl.popmovies.entities.Film;
 import com.udacity.timpl.popmovies.network.API;
-import com.udacity.timpl.popmovies.network.responses.MovieResponse;
 import com.udacity.timpl.popmovies.network.RestClient;
+import com.udacity.timpl.popmovies.network.responses.MovieResponse;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class MainInteract implements IMainInteract {
 
     @Override
     public Flowable<List<Film>> loadFavorite() {
-        return App.database.filmDAO().getFilms()
+        return FilmRepository.instance.getFilms()
                 .subscribeOn(Schedulers.io());
 
     }

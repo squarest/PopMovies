@@ -1,8 +1,7 @@
 package com.udacity.timpl.popmovies.detailed.domain;
 
 
-import com.udacity.timpl.popmovies.App;
-import com.udacity.timpl.popmovies.db.FilmDAO;
+import com.udacity.timpl.popmovies.data.FilmRepository;
 import com.udacity.timpl.popmovies.entities.Film;
 import com.udacity.timpl.popmovies.network.API;
 import com.udacity.timpl.popmovies.network.RestClient;
@@ -21,11 +20,11 @@ public class DetailedInteract implements IDetailedInteract {
 
     private boolean isFavorite;
 
-    private FilmDAO database;
+    private FilmRepository database;
     private API api;
 
     public DetailedInteract() {
-        this.database = App.database.filmDAO();
+        this.database = FilmRepository.instance;
         this.api = RestClient.getInstance().getApi();
     }
 
@@ -40,7 +39,7 @@ public class DetailedInteract implements IDetailedInteract {
         return database.getFilm(filmId)
                 .subscribeOn(Schedulers.io())
                 .map(films -> {
-                    isFavorite = !films.isEmpty();
+                    isFavorite = films.size() == 1;
                     return isFavorite;
                 });
     }
@@ -55,13 +54,8 @@ public class DetailedInteract implements IDetailedInteract {
             } else {
                 this.database.insertFilm(film);
             }
-
-        })
-                .subscribeOn(Schedulers.io())
-                .map(o ->
-                {
-                    isFavorite = !isFavorite;
-                    return isFavorite;
-                });
+            isFavorite = !isFavorite;
+            singleEmitter.onSuccess(isFavorite);
+        });
     }
 }

@@ -42,7 +42,6 @@ public class DetailedPresenter {
 
     public void menuItemClicked() {
         detailedInteract.changefavorite(film)
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
                     if (aBoolean)
                         view.setFavoriteIcon();

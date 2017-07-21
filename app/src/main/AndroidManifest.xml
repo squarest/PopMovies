@@ -19,8 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".detailed.presentation.DetailedActivity"></activity>
-        <activity android:name=".favorite.view.FavoriteActivity"></activity>
+        <activity android:name=".detailed.presentation.DetailedActivity" />
+
+        <provider
+            android:name=".data.FilmProvider"
+            android:authorities="com.udacity.timpl.popmovies.app" />
     </application>
 
 </manifest>
